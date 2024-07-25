@@ -4,8 +4,9 @@ import { Checkbox } from '../components/ui/checkbox'
 import { Button } from '../components/ui/button'
 import { useForm } from 'react-hook-form'
 import { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from '../context/AuthProvider'
+import Container from '../Container'
 
 interface LoginFormValues {
   email: string;
@@ -23,7 +24,8 @@ const Login = () => {
 
     const {login } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(false)
-    const [isAuthenticated, setIsAuthenticated] = useState(true)
+    const [isBoxChecked, setIsBoxChecked] = useState(false)
+    const [error, SetError] = useState("")
     const navigate = useNavigate()
 
     useEffect(()=> {
@@ -42,12 +44,14 @@ const Login = () => {
 
     const onSubmit = async (data:LoginFormValues) => {
         try {
+            if(!isBoxChecked) { SetError("You must agree with Terms and conditions") ; return;}
             setIsLoading(true)
             const userData = await login(data.email, data.password);
-            if(userData){
-                navigate('/',{replace:true})
+            if (userData) {
+                navigate('/', { replace: true })
                 localStorage.setItem("userData", JSON.stringify(userData));
             }
+
         } catch (error) {
             console.log(error)
         } finally{
@@ -60,7 +64,7 @@ const Login = () => {
     
     
     return (
-        <div>
+        <Container>
         <form onSubmit={handleSubmit(onSubmit)} className='flex h-screen w-full items-center justify-center '>
             <div className='flex flex-col gap-4 md:w-1/3 w-2/3 mb-10 bg-purple-300 px-8 py-8 rounded-xl '>
                 <h1 className='text-3xl font-bold flex'>Login</h1>
@@ -105,17 +109,18 @@ const Login = () => {
                 {errors.password && (<span className='text-red-600'>{errors.password.message}</span>)}
                 <div className='flex flex-row text-xs justify-between'>
                     <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" />
+                        <Checkbox checked={isBoxChecked} onClick={()=> setIsBoxChecked(prev => !prev)} id="terms" />
                         <Label htmlFor="terms">Accept terms and conditions</Label>
                     </div>
                     <span className='text-sm font-semibold text-purple-800'>Forget password</span>
                 </div>
+                <div>{error && <div className='text-red-600'>{error}</div> }</div>
 
                 <Button type='submit' className='bg-purple-700 hover:bg-purple-600'>{isLoading? "Loading..." : "Sign in"}</Button>
-                <p className='text-md text-gray-800'>Don't have an account? <span className='text-lg font-semibold text-purple-800'>Sign up</span></p>
+                <p className='text-md text-gray-800'>Don't have an account? <Link to={'/signup'}><span className='text-lg font-semibold text-purple-800'>Sign in</span></Link></p>
             </div>
         </form>
-        </div>
+        </Container>
     )
 }
 

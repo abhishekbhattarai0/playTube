@@ -25,7 +25,9 @@ const router = createBrowserRouter([
     children:[
       {
         path: '/',
-        element: <Home/>
+        element: (<AuthLayout> 
+          <Home/>
+        </AuthLayout>)
       },
       {
         path: 'tweets',
