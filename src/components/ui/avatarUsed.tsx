@@ -1,6 +1,5 @@
 import {
     Avatar,
-    AvatarFallback,
     AvatarImage,
   } from "./avatar"
   

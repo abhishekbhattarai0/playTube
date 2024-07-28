@@ -34,6 +34,7 @@ const Login = () => {
             data = JSON.parse(data)
             const accessToken = data?.accessToken;
             const user = data?.user
+            console.log(user, "user")
             setAuth({...auth,accessToken:accessToken,user:user,authStatus:true})
             if(accessToken && user){
                 navigate('/', {replace:true})

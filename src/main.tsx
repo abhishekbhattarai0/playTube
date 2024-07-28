@@ -16,6 +16,7 @@ import ErrorPage from './pages/ErrorPage.tsx'
 import Home from './pages/Home.tsx'
 import Playlist from './pages/Playlist.tsx'
 import Subscriptions from './pages/Subscriptions.tsx'
+import VideoPlayerPage from './pages/VideoPlayerPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: 'signup',
         element: <Signup/>
+      },
+      {
+        path: '/:videoId',
+        element: <VideoPlayerPage/>
       }
     ]
   }

@@ -3,7 +3,9 @@ import { Button } from '../components/ui/button'
 import { useForm } from 'react-hook-form'
 import { InputFile } from '../components/ui/InputFile'
 import Container from '../Container';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import AuthContext from '../context/AuthProvider';
 
 interface signupFormValues {
   email: string;
@@ -11,19 +13,44 @@ interface signupFormValues {
   fullname: string;
   password: string;
   avatar: File;
-  coverimage: File;
+  coverImage: File;
 }
 
+
+
 const Signup = () => {
+    const {signup} = useContext(AuthContext)
+    const navigate = useNavigate()
+
+    const [avatar, setAvatar] = useState()
+    const [coverImage, setCoverImage] = useState()
     const { 
         register,
         handleSubmit,
         formState: {errors}
     } = useForm<signupFormValues>()
 
-    const onSubmit = (data:signupFormValues) => {
-        console.log("hello")
-        console.log(data, register)
+    const onAvatarImage = (e) => {
+        const file = e.target.files[0]
+        setAvatar(file)
+    }
+
+    const onCoverImage = (e) => {
+        setCoverImage(e.target.files[0])
+    }
+
+    
+
+    const onSubmit = async(data:signupFormValues) => {
+        console.log(data)
+       const response = await signup(data.email,data.username, data.fullname, data.password, avatar, coverImage)
+       console.log("reponse", response)
+
+       if(response){
+        navigate('/',{replace:true})
+       }
+       console.log(response)
+
     }
     return (
         <Container>
@@ -91,13 +118,13 @@ const Signup = () => {
 
                 <InputFile
                     label='Avatar'
-                    {...register("avatar", { required: true })} 
+                    onChange={onAvatarImage} 
                 />
 
                 <InputFile
 
                     label='CoverImage'
-                    {...register("coverimage", { required: true })} 
+                    onChange={onCoverImage}
                 />
 
                 <Input

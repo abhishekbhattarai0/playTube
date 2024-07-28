@@ -4,10 +4,13 @@ import { Input } from './input';
 
 interface InputFileProps {
   label?: string;
+  props:{
+    onChange?: ()=>void
+  }
 }
 
-export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
-  ({ label = "", ...props }, ref: Ref<HTMLInputElement>) => {
+export const InputFile = forwardRef(
+  ({ label = "", ...props }:InputFileProps, ref: Ref<HTMLInputElement>) => {
     return (
       <div>
         {label && (

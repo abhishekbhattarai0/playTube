@@ -1,11 +1,17 @@
 import { AvatarUsed } from './ui/avatarUsed'
-import logo from '../../public/vite.svg'
+import logo from '/vite.svg'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 import { Search } from 'lucide-react'
 import { Button } from './ui/button'
 import { NavLink } from 'react-router-dom'
+import { useContext, useEffect } from 'react'
+import AuthContext from '../context/AuthProvider'
 
 const Navbar = () => {
+    const {auth} = useContext(AuthContext)
+    useEffect(()=> {
+        console.log(auth.user.avatar)
+    },[])
   return (
     <div className='flex flex-cols bg-white opacity-80 justify-between items-center py-2 px-2 fixed w-full top-0 '>
         <div className='flex gap-6 items-center'>
@@ -55,15 +61,15 @@ const Navbar = () => {
                         <label className='relative top-1 -inset-8 '><Search/></label>
                     </button>
             </div>
-            <HoverCard>
+            {auth.authStatus && <HoverCard>
                 <HoverCardTrigger>
-                    <AvatarUsed imageSrc={logo} className='w-6'/>
+                    <AvatarUsed imageSrc={auth?.user?.avatar} className='w-6'/>
                     <HoverCardContent className='rounded-xl bg-slate-400  cursor-pointer'>
                         <p>Profile</p>
                         <Button variant="outline" >Logout</Button>
                     </HoverCardContent>
                 </HoverCardTrigger>
-            </HoverCard>
+            </HoverCard>}
 
        </div>
     </div>
